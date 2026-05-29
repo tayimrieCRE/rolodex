@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CREdex</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F5F3EE;
+    --surface: #FFFFFF;
+    --surface2: #F0EDE6;
+    --border: #E2DDD4;
+    --border-strong: #C8C2B6;
+    --text: #1A1916;
+    --text-muted: #6B6760;
+    --text-faint: #9E9A94;
+    --accent: #1A3A2A;
+    --accent-mid: #2D5C42;
+    --accent-light: #E8F0EB;
+    --accent-text: #1A3A2A;
+    --danger: #8B2020;
+    --danger-light: #F5EAEA;
+    --warning: #7A4A00;
+    --warning-light: #FFF4E0;
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-lg: 0 4px 16px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--accent);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-brand {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    color: #FFFFFF;
+    letter-spacing: 0.02em;
+  }
+  .header-brand span {
+    color: #7FBF9A;
+    font-style: italic;
+  }
+  .header-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+    white-space: nowrap;
+  }
+  .btn-primary {
+    background: #7FBF9A;
+    color: var(--accent);
+  }
+  .btn-primary:hover { background: #6DB088; }
+  .btn-ghost {
+    background: rgba(255,255,255,0.1);
+    color: #FFFFFF;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  .btn-ghost:hover { background: rgba(255,255,255,0.18); }
+  .btn-danger {
+    background: var(--danger-light);
+    color: var(--danger);
+  }
+  .btn-danger:hover { background: #EDD5D5; }
+  .btn-outline {
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-outline:hover { background: var(--surface2); }
+
+  /* TOOLBAR */
+  .toolbar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .search-wrap {
+    flex: 1;
+    min-width: 200px;
+    position: relative;
+  }
+  .search-wrap svg {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-faint);
+    pointer-events: none;
+  }
+  .search-input {
+    width: 100%;
+    height: 38px;
+    padding: 0 12px 0 36px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .search-input:focus { border-color: var(--accent-mid); }
+  .search-input::placeholder { color: var(--text-faint); }
+  select.filter-select {
+    height: 38px;
+    padding: 0 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    outline: none;
+    cursor: pointer;
+  }
+  select.filter-select:focus { border-color: var(--accent-mid); }
+  .view-toggle {
+    display: flex;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+  }
+  .view-btn {
+    padding: 8px 12px;
+    background: var(--bg);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    color: var(--text-muted);
+    transition: all 0.15s;
+  }
+  .view-btn.active {
+    background: var(--accent);
+    color: white;
+  }
+  .count-badge {
+    font-size: 12px;
+    color: var(--text-faint);
+    white-space: nowrap;
+    padding: 0 4px;
+  }
+
+  /* MAIN */
+  .main {
+    padding: 20px 24px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  /* FOLLOW-UP BANNER */
+  .followup-banner {
+    background: var(--warning-light);
+    border: 1px solid #E8C97A;
+    border-radius: var(--radius-md);
+    padding: 10px 16px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--warning);
+  }
+
+  /* CARD GRID */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  .contact-card {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.2s, transform 0.2s;
+    cursor: pointer;
+  }
+  .contact-card:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-1px);
+  }
+  .contact-card.overdue {
+    border-color: #E8C97A;
+    border-width: 1.5px;
+  }
+  .card-photo {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    object-position: top;
+    background: var(--surface2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 42px;
+    color: var(--text-faint);
+  }
+  .card-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+  }
+  .card-body {
+    padding: 14px 16px;
+  }
+  .card-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    color: var(--text);
+    margin-bottom: 2px;
+    line-height: 1.2;
+  }
+  .card-role {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 10px;
+  }
+  .tag {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+  .tag-type {
+    background: var(--accent-light);
+    color: var(--accent-text);
+  }
+  .tag-prop {
+    background: #EEF2FF;
+    color: #3730A3;
+  }
+  .tag-custom {
+    background: var(--surface2);
+    color: var(--text-muted);
+  }
+  .tag-overdue {
+    background: var(--warning-light);
+    color: var(--warning);
+  }
+  .card-meta {
+    font-size: 12px;
+    color: var(--text-faint);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* LIST VIEW */
+  .list-view {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .list-row {
+    display: grid;
+    grid-template-columns: 48px 1fr 160px 120px 100px 80px;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+  .list-row:last-child { border-bottom: none; }
+  .list-row:hover { background: var(--surface2); }
+  .list-row.overdue { background: #FFFBF0; }
+  .list-header {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    background: var(--surface2);
+    cursor: default;
+  }
+  .list-header:hover { background: var(--surface2); }
+  .list-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--surface2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 15px;
+    color: var(--text-faint);
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .list-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .list-name { font-weight: 500; font-size: 14px; }
+  .list-company { font-size: 12px; color: var(--text-muted); margin-top: 1px; }
+  .list-cell { font-size: 13px; color: var(--text-muted); }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 200;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  .modal {
+    background: var(--surface);
+    border-radius: var(--radius-xl);
+    width: 100%;
+    max-width: 640px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    overflow: hidden;
+    margin: auto;
+  }
+  .modal-header {
+    background: var(--accent);
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .modal-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    color: white;
+  }
+  .modal-close {
+    background: rgba(255,255,255,0.15);
+    border: none;
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+  }
+  .modal-close:hover { background: rgba(255,255,255,0.25); }
+  .modal-body { padding: 24px; }
+  .modal-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+
+  /* PHOTO ZONE */
+  .photo-zone {
+    width: 100%;
+    height: 180px;
+    border: 2px dashed var(--border-strong);
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+    background: var(--surface2);
+  }
+  .photo-zone:hover { border-color: var(--accent-mid); background: var(--accent-light); }
+  .photo-zone.has-photo { border-style: solid; border-color: var(--border); padding: 0; }
+  .photo-zone img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+  }
+  .photo-zone-label {
+    font-size: 13px;
+    color: var(--text-muted);
+    text-align: center;
+    line-height: 1.4;
+  }
+  .photo-zone-hint {
+    font-size: 11px;
+    color: var(--text-faint);
+    text-align: center;
+  }
+  .photo-clear {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(0,0,0,0.5);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .photo-url-input {
+    margin-top: 8px;
+    display: flex;
+    gap: 8px;
+    width: 100%;
+  }
+  .photo-url-field {
+    flex: 1;
+    height: 34px;
+    padding: 0 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    background: var(--surface);
+    color: var(--text);
+    outline: none;
+  }
+  .photo-url-field:focus { border-color: var(--accent-mid); }
+  .photo-url-field::placeholder { color: var(--text-faint); }
+
+  /* FORM */
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .form-group.full { grid-column: 1 / -1; }
+  label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  input[type="text"], input[type="email"], input[type="tel"], input[type="url"], input[type="date"], select, textarea {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    background: var(--surface);
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus,
+  input[type="url"]:focus, input[type="date"]:focus, select:focus, textarea:focus {
+    border-color: var(--accent-mid);
+  }
+  textarea {
+    resize: vertical;
+    min-height: 100px;
+    line-height: 1.6;
+  }
+  .divider {
+    grid-column: 1 / -1;
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 4px 0;
+  }
+  .section-label {
+    grid-column: 1 / -1;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 4px;
+  }
+
+  /* DETAIL VIEW */
+  .detail-photo {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    object-position: top;
+    background: var(--surface2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 64px;
+    color: var(--text-faint);
+  }
+  .detail-photo img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+  .detail-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+  .detail-role { font-size: 14px; color: var(--text-muted); margin-bottom: 16px; }
+  .detail-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+  .detail-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .detail-field { display: flex; flex-direction: column; gap: 2px; }
+  .detail-field label {
+    font-size: 11px;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+  }
+  .detail-field span {
+    font-size: 14px;
+    color: var(--text);
+    word-break: break-word;
+  }
+  .detail-field a { color: var(--accent-mid); text-decoration: none; }
+  .detail-field a:hover { text-decoration: underline; }
+  .detail-field.full { grid-column: 1 / -1; }
+  .notes-box {
+    background: var(--surface2);
+    border-radius: var(--radius-md);
+    padding: 14px;
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  /* EMPTY STATE */
+  .empty {
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--text-faint);
+  }
+  .empty-icon { font-size: 48px; margin-bottom: 12px; }
+  .empty h3 { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--text-muted); margin-bottom: 6px; }
+  .empty p { font-size: 14px; }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--accent);
+    color: white;
+    padding: 10px 18px;
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    font-weight: 500;
+    z-index: 999;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.3s;
+    pointer-events: none;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  @media (max-width: 600px) {
+    .header { padding: 0 16px; }
+    .header-brand { font-size: 17px; }
+    .toolbar { padding: 10px 16px; }
+    .main { padding: 16px; }
+    .form-grid { grid-template-columns: 1fr; }
+    .detail-fields { grid-template-columns: 1fr; }
+    .list-row { grid-template-columns: 38px 1fr 90px; }
+    .list-row > *:nth-child(n+4) { display: none; }
+    .card-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+    .modal { border-radius: var(--radius-lg); }
+    .modal-body { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-brand">CRE<span>dex</span></div>
+  <div class="header-actions">
+    <button class="btn btn-ghost" onclick="exportData()">Export</button>
+    <button class="btn btn-ghost" onclick="triggerImport()">Import</button>
+    <button class="btn btn-primary" onclick="openAdd()">+ Add Contact</button>
+    <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)">
+  </div>
+</header>
+
+<div class="toolbar">
+  <div class="search-wrap">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input class="search-input" id="search" placeholder="Search by name, company, submarket, tag..." oninput="render()">
+  </div>
+  <select class="filter-select" id="filter-type" onchange="render()">
+    <option value="">All types</option>
+    <option>Prospect</option>
+    <option>Broker</option>
+    <option>Landlord Rep</option>
+    <option>Vendor</option>
+    <option>Connector</option>
+    <option>Other</option>
+  </select>
+  <select class="filter-select" id="filter-prop" onchange="render()">
+    <option value="">All property types</option>
+    <option>Office</option>
+    <option>Industrial</option>
+    <option>Retail</option>
+    <option>Mixed</option>
+    <option>Other</option>
+  </select>
+  <select class="filter-select" id="sort-by" onchange="render()">
+    <option value="name">Sort: Name</option>
+    <option value="company">Sort: Company</option>
+    <option value="followup">Sort: Follow-up</option>
+    <option value="last">Sort: Last Contacted</option>
+    <option value="recent">Sort: Recently Added</option>
+  </select>
+  <div class="view-toggle">
+    <button class="view-btn active" id="btn-card" onclick="setView('card')" title="Card view">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    </button>
+    <button class="view-btn" id="btn-list" onclick="setView('list')" title="List view">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+  <span class="count-badge" id="count-label"></span>
+</div>
+
+<div class="main" id="main-content"></div>
+
+<!-- ADD / EDIT MODAL -->
+<div class="modal-overlay" id="form-modal" style="display:none" onclick="modalOverlayClick(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-title" id="form-modal-title">Add Contact</div>
+      <button class="modal-close" onclick="closeModal('form-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="photo-zone" id="photo-zone" onclick="photoZoneClick()" tabindex="0" onkeydown="if(event.key==='Enter')photoZoneClick()">
+        <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="color:var(--text-faint)"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        <div class="photo-zone-label">Click to paste photo (Ctrl+V / Cmd+V)<br>or enter a URL below</div>
+        <div class="photo-zone-hint">Works with images copied from brokerage sites, Google, etc.</div>
+        <button class="photo-clear" id="photo-clear-btn" style="display:none" onclick="clearPhoto(event)">✕</button>
+      </div>
+      <div class="photo-url-input">
+        <input class="photo-url-field" id="photo-url" type="url" placeholder="Or paste an image URL here (e.g. from a company bio page)" oninput="loadPhotoFromUrl()">
+      </div>
+      <br>
+      <div class="form-grid">
+        <div class="form-group full">
+          <label>Full Name *</label>
+          <input type="text" id="f-name" placeholder="e.g. Michael Chen" required>
+        </div>
+        <div class="form-group">
+          <label>Company / Brokerage</label>
+          <input type="text" id="f-company" placeholder="e.g. Colliers, CBRE">
+        </div>
+        <div class="form-group">
+          <label>Title / Role</label>
+          <input type="text" id="f-title" placeholder="e.g. VP Real Estate">
+        </div>
+        <div class="form-group">
+          <label>Phone</label>
+          <input type="tel" id="f-phone" placeholder="e.g. 416-555-0100">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="f-email" placeholder="e.g. m.chen@colliers.com">
+        </div>
+        <div class="form-group full">
+          <label>LinkedIn URL</label>
+          <input type="url" id="f-linkedin" placeholder="https://linkedin.com/in/...">
+        </div>
+        <hr class="divider">
+        <div class="section-label">CRE Details</div>
+        <div class="form-group">
+          <label>Relationship Type</label>
+          <select id="f-reltype">
+            <option value="">Select...</option>
+            <option>Prospect</option>
+            <option>Broker</option>
+            <option>Landlord Rep</option>
+            <option>Vendor</option>
+            <option>Connector</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Property Type</label>
+          <select id="f-proptype">
+            <option value="">Select...</option>
+            <option>Office</option>
+            <option>Industrial</option>
+            <option>Retail</option>
+            <option>Mixed</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Submarket / Area</label>
+          <input type="text" id="f-submarket" placeholder="e.g. King West, Vaughan">
+        </div>
+        <div class="form-group">
+          <label>How We Met</label>
+          <input type="text" id="f-howmet" placeholder="e.g. BOMA event June 2026">
+        </div>
+        <div class="form-group">
+          <label>Last Contacted</label>
+          <input type="date" id="f-lastcontact">
+        </div>
+        <div class="form-group">
+          <label>Follow-up Date</label>
+          <input type="date" id="f-followup">
+        </div>
+        <div class="form-group full">
+          <label>Tags</label>
+          <input type="text" id="f-tags" placeholder="e.g. warm lead, met twice, referred by Sean (comma-separated)">
+        </div>
+        <hr class="divider">
+        <div class="section-label">Notes</div>
+        <div class="form-group full">
+          <label>Notes</label>
+          <textarea id="f-notes" rows="6" placeholder="Anything worth remembering. Kids names, what they said about their space, golf handicap, lease situation, deal history, personality notes..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div>
+        <button class="btn btn-danger" id="delete-btn" style="display:none" onclick="deleteContact()">Delete Contact</button>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-outline" onclick="closeModal('form-modal')">Cancel</button>
+        <button class="btn btn-primary" onclick="saveContact()">Save Contact</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="modal-overlay" id="detail-modal" style="display:none" onclick="modalOverlayClick(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div id="detail-photo-wrap"></div>
+    <div class="modal-body" id="detail-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('detail-modal')">Close</button>
+      <button class="btn btn-primary" id="detail-edit-btn">Edit</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let contacts = JSON.parse(localStorage.getItem('credex_v2') || '[]');
+let currentView = 'card';
+let editingId = null;
+let currentPhoto = null;
+
+function save() {
+  localStorage.setItem('credex_v2', JSON.stringify(contacts));
+}
+
+function uid() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2);
+}
+
+function initials(name) {
+  return name.split(' ').slice(0,2).map(w=>w[0]||'').join('').toUpperCase();
+}
+
+function today() {
+  return new Date().toISOString().slice(0,10);
+}
+
+function isOverdue(date) {
+  if (!date) return false;
+  return date <= today();
+}
+
+function formatDate(d) {
+  if (!d) return '';
+  const [y,m,day] = d.split('-');
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return `${months[parseInt(m)-1]} ${parseInt(day)}, ${y}`;
+}
+
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+function setView(v) {
+  currentView = v;
+  document.getElementById('btn-card').classList.toggle('active', v==='card');
+  document.getElementById('btn-list').classList.toggle('active', v==='list');
+  render();
+}
+
+function getFiltered() {
+  const q = document.getElementById('search').value.toLowerCase().trim();
+  const ft = document.getElementById('filter-type').value;
+  const fp = document.getElementById('filter-prop').value;
+  const sort = document.getElementById('sort-by').value;
+
+  let list = contacts.filter(c => {
+    const blob = [c.name, c.company, c.title, c.submarket, c.howmet, c.notes, c.tags, c.email, c.phone].join(' ').toLowerCase();
+    const matchQ = !q || blob.includes(q);
+    const matchT = !ft || c.reltype === ft;
+    const matchP = !fp || c.proptype === fp;
+    return matchQ && matchT && matchP;
+  });
+
+  list.sort((a,b) => {
+    if (sort === 'name') return (a.name||'').localeCompare(b.name||'');
+    if (sort === 'company') return (a.company||'').localeCompare(b.company||'');
+    if (sort === 'followup') {
+      if (!a.followup && !b.followup) return 0;
+      if (!a.followup) return 1;
+      if (!b.followup) return -1;
+      return a.followup.localeCompare(b.followup);
+    }
+    if (sort === 'last') {
+      if (!a.lastcontact && !b.lastcontact) return 0;
+      if (!a.lastcontact) return 1;
+      if (!b.lastcontact) return -1;
+      return b.lastcontact.localeCompare(a.lastcontact);
+    }
+    if (sort === 'recent') return b.created - a.created;
+    return 0;
+  });
+
+  return list;
+}
+
+function render() {
+  const list = getFiltered();
+  const container = document.getElementById('main-content');
+  document.getElementById('count-label').textContent = list.length === contacts.length
+    ? `${contacts.length} contact${contacts.length!==1?'s':''}`
+    : `${list.length} of ${contacts.length}`;
+
+  if (contacts.length === 0) {
+    container.innerHTML = `<div class="empty"><div class="empty-icon">📋</div><h3>Your rolodex is empty</h3><p>Add your first contact to get started.</p></div>`;
+    return;
+  }
+
+  if (list.length === 0) {
+    container.innerHTML = `<div class="empty"><div class="empty-icon">🔍</div><h3>No results</h3><p>Try a different search or filter.</p></div>`;
+    return;
+  }
+
+  const overdue = list.filter(c => isOverdue(c.followup));
+  let html = '';
+
+  if (overdue.length > 0) {
+    const names = overdue.slice(0,3).map(c=>c.name.split(' ')[0]).join(', ');
+    const extra = overdue.length > 3 ? ` +${overdue.length-3} more` : '';
+    html += `<div class="followup-banner"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> <strong>Follow-up needed:</strong>&nbsp;${names}${extra}</div>`;
+  }
+
+  if (currentView === 'card') {
+    html += `<div class="card-grid">`;
+    for (const c of list) {
+      const overdueCls = isOverdue(c.followup) ? ' overdue' : '';
+      const photoHtml = c.photo
+        ? `<div class="card-photo"><img src="${esc(c.photo)}" alt="${esc(c.name)}" onerror="this.parentElement.innerHTML='${initials(c.name)}'"></div>`
+        : `<div class="card-photo">${initials(c.name)}</div>`;
+      const tags = [];
+      if (c.reltype) tags.push(`<span class="tag tag-type">${esc(c.reltype)}</span>`);
+      if (c.proptype) tags.push(`<span class="tag tag-prop">${esc(c.proptype)}</span>`);
+      if (isOverdue(c.followup)) tags.push(`<span class="tag tag-overdue">Follow up</span>`);
+      if (c.tags) c.tags.split(',').map(t=>t.trim()).filter(Boolean).slice(0,3).forEach(t => tags.push(`<span class="tag tag-custom">${esc(t)}</span>`));
+
+      html += `<div class="contact-card${overdueCls}" onclick="openDetail('${c.id}')">
+        ${photoHtml}
+        <div class="card-body">
+          <div class="card-name">${esc(c.name)}</div>
+          <div class="card-role">${[c.title,c.company].filter(Boolean).map(esc).join(' · ')}</div>
+          ${tags.length ? `<div class="card-tags">${tags.join('')}</div>` : ''}
+          <div class="card-meta">${c.submarket ? `<svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> ${esc(c.submarket)}` : (c.howmet ? `<svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> ${esc(c.howmet)}` : '')}</div>
+        </div>
+      </div>`;
+    }
+    html += `</div>`;
+  } else {
+    html += `<div class="list-view">
+      <div class="list-row list-header">
+        <div></div>
+        <div>Name</div>
+        <div>Company</div>
+        <div>Submarket</div>
+        <div>Type</div>
+        <div>Follow-up</div>
+      </div>`;
+    for (const c of list) {
+      const overdueCls = isOverdue(c.followup) ? ' overdue' : '';
+      const avatarHtml = c.photo
+        ? `<div class="list-avatar"><img src="${esc(c.photo)}" alt="" onerror="this.parentElement.innerHTML='${initials(c.name)}'"></div>`
+        : `<div class="list-avatar">${initials(c.name)}</div>`;
+      html += `<div class="list-row${overdueCls}" onclick="openDetail('${c.id}')">
+        ${avatarHtml}
+        <div><div class="list-name">${esc(c.name)}</div><div class="list-company">${esc(c.title||'')}</div></div>
+        <div class="list-cell">${esc(c.company||'')}</div>
+        <div class="list-cell">${esc(c.submarket||'')}</div>
+        <div class="list-cell">${c.reltype ? `<span class="tag tag-type" style="font-size:11px">${esc(c.reltype)}</span>` : ''}</div>
+        <div class="list-cell" style="${isOverdue(c.followup)?'color:var(--warning);font-weight:500':''}">${c.followup ? formatDate(c.followup) : ''}</div>
+      </div>`;
+    }
+    html += `</div>`;
+  }
+
+  container.innerHTML = html;
+}
+
+function esc(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function openAdd() {
+  editingId = null;
+  currentPhoto = null;
+  document.getElementById('form-modal-title').textContent = 'Add Contact';
+  document.getElementById('delete-btn').style.display = 'none';
+  clearForm();
+  document.getElementById('form-modal').style.display = 'flex';
+  setTimeout(() => document.getElementById('f-name').focus(), 100);
+}
+
+function openEdit(id) {
+  closeModal('detail-modal');
+  const c = contacts.find(x=>x.id===id);
+  if (!c) return;
+  editingId = id;
+  currentPhoto = c.photo || null;
+  document.getElementById('form-modal-title').textContent = 'Edit Contact';
+  document.getElementById('delete-btn').style.display = 'inline-flex';
+  fillForm(c);
+  document.getElementById('form-modal').style.display = 'flex';
+}
+
+function clearForm() {
+  ['f-name','f-company','f-title','f-phone','f-email','f-linkedin','f-submarket','f-howmet','f-tags','f-notes','f-lastcontact','f-followup','photo-url'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  ['f-reltype','f-proptype'].forEach(id => document.getElementById(id).value = '');
+  updatePhotoZone();
+}
+
+function fillForm(c) {
+  document.getElementById('f-name').value = c.name||'';
+  document.getElementById('f-company').value = c.company||'';
+  document.getElementById('f-title').value = c.title||'';
+  document.getElementById('f-phone').value = c.phone||'';
+  document.getElementById('f-email').value = c.email||'';
+  document.getElementById('f-linkedin').value = c.linkedin||'';
+  document.getElementById('f-submarket').value = c.submarket||'';
+  document.getElementById('f-howmet').value = c.howmet||'';
+  document.getElementById('f-tags').value = c.tags||'';
+  document.getElementById('f-notes').value = c.notes||'';
+  document.getElementById('f-lastcontact').value = c.lastcontact||'';
+  document.getElementById('f-followup').value = c.followup||'';
+  document.getElementById('f-reltype').value = c.reltype||'';
+  document.getElementById('f-proptype').value = c.proptype||'';
+  document.getElementById('photo-url').value = (c.photo && !c.photo.startsWith('data:')) ? c.photo : '';
+  updatePhotoZone();
+}
+
+function updatePhotoZone() {
+  const zone = document.getElementById('photo-zone');
+  const clearBtn = document.getElementById('photo-clear-btn');
+  if (currentPhoto) {
+    zone.classList.add('has-photo');
+    zone.innerHTML = `<img src="${currentPhoto}" alt="Contact photo" onerror="this.parentElement.innerHTML='No preview'"><button class="photo-clear" id="photo-clear-btn" onclick="clearPhoto(event)">✕</button>`;
+  } else {
+    zone.classList.remove('has-photo');
+    zone.innerHTML = `<svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="color:var(--text-faint)"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><div class="photo-zone-label">Click here, then paste (Ctrl+V / Cmd+V)<br>to drop in a copied image</div><div class="photo-zone-hint">Works with images copied from brokerage sites, Google, etc.</div>`;
+  }
+}
+
+function photoZoneClick() {
+  document.getElementById('photo-zone').focus();
+}
+
+function loadPhotoFromUrl() {
+  const url = document.getElementById('photo-url').value.trim();
+  if (url) {
+    currentPhoto = url;
+    updatePhotoZone();
+  }
+}
+
+function clearPhoto(e) {
+  e.stopPropagation();
+  currentPhoto = null;
+  document.getElementById('photo-url').value = '';
+  updatePhotoZone();
+}
+
+document.addEventListener('paste', function(e) {
+  const modal = document.getElementById('form-modal');
+  if (modal.style.display === 'none') return;
+  const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+  for (const item of items) {
+    if (item.type.startsWith('image/')) {
+      e.preventDefault();
+      const blob = item.getAsFile();
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        currentPhoto = ev.target.result;
+        document.getElementById('photo-url').value = '';
+        updatePhotoZone();
+        toast('Photo pasted!');
+      };
+      reader.readAsDataURL(blob);
+      return;
+    }
+  }
+});
+
+function saveContact() {
+  const name = document.getElementById('f-name').value.trim();
+  if (!name) {
+    document.getElementById('f-name').focus();
+    document.getElementById('f-name').style.borderColor = 'var(--danger)';
+    setTimeout(()=>document.getElementById('f-name').style.borderColor='',2000);
+    return;
+  }
+
+  const data = {
+    name,
+    company: document.getElementById('f-company').value.trim(),
+    title: document.getElementById('f-title').value.trim(),
+    phone: document.getElementById('f-phone').value.trim(),
+    email: document.getElementById('f-email').value.trim(),
+    linkedin: document.getElementById('f-linkedin').value.trim(),
+    submarket: document.getElementById('f-submarket').value.trim(),
+    howmet: document.getElementById('f-howmet').value.trim(),
+    reltype: document.getElementById('f-reltype').value,
+    proptype: document.getElementById('f-proptype').value,
+    lastcontact: document.getElementById('f-lastcontact').value,
+    followup: document.getElementById('f-followup').value,
+    tags: document.getElementById('f-tags').value.trim(),
+    notes: document.getElementById('f-notes').value.trim(),
+    photo: currentPhoto || null,
+  };
+
+  if (editingId) {
+    const idx = contacts.findIndex(x=>x.id===editingId);
+    if (idx !== -1) {
+      contacts[idx] = { ...contacts[idx], ...data };
+    }
+    toast('Contact updated');
+  } else {
+    data.id = uid();
+    data.created = Date.now();
+    contacts.unshift(data);
+    toast('Contact added');
+  }
+
+  save();
+  closeModal('form-modal');
+  render();
+}
+
+function deleteContact() {
+  if (!editingId) return;
+  const c = contacts.find(x=>x.id===editingId);
+  if (!confirm(`Delete ${c?.name}? This cannot be undone.`)) return;
+  contacts = contacts.filter(x=>x.id!==editingId);
+  save();
+  closeModal('form-modal');
+  toast('Contact deleted');
+  render();
+}
+
+function openDetail(id) {
+  const c = contacts.find(x=>x.id===id);
+  if (!c) return;
+
+  const photoWrap = document.getElementById('detail-photo-wrap');
+  if (c.photo) {
+    photoWrap.innerHTML = `<div class="detail-photo"><img src="${esc(c.photo)}" alt="${esc(c.name)}" onerror="this.parentElement.innerHTML='${initials(c.name)}'"></div>`;
+  } else {
+    photoWrap.innerHTML = `<div class="detail-photo">${initials(c.name)}</div>`;
+  }
+
+  const tags = [];
+  if (c.reltype) tags.push(`<span class="tag tag-type">${esc(c.reltype)}</span>`);
+  if (c.proptype) tags.push(`<span class="tag tag-prop">${esc(c.proptype)}</span>`);
+  if (isOverdue(c.followup)) tags.push(`<span class="tag tag-overdue">Follow-up overdue</span>`);
+  if (c.tags) c.tags.split(',').map(t=>t.trim()).filter(Boolean).forEach(t=>tags.push(`<span class="tag tag-custom">${esc(t)}</span>`));
+
+  const fields = [];
+  if (c.company) fields.push(`<div class="detail-field"><label>Company</label><span>${esc(c.company)}</span></div>`);
+  if (c.title) fields.push(`<div class="detail-field"><label>Title</label><span>${esc(c.title)}</span></div>`);
+  if (c.phone) fields.push(`<div class="detail-field"><label>Phone</label><span><a href="tel:${esc(c.phone)}">${esc(c.phone)}</a></span></div>`);
+  if (c.email) fields.push(`<div class="detail-field"><label>Email</label><span><a href="mailto:${esc(c.email)}">${esc(c.email)}</a></span></div>`);
+  if (c.submarket) fields.push(`<div class="detail-field"><label>Submarket</label><span>${esc(c.submarket)}</span></div>`);
+  if (c.howmet) fields.push(`<div class="detail-field"><label>How we met</label><span>${esc(c.howmet)}</span></div>`);
+  if (c.lastcontact) fields.push(`<div class="detail-field"><label>Last contacted</label><span>${formatDate(c.lastcontact)}</span></div>`);
+  if (c.followup) fields.push(`<div class="detail-field"><label>Follow-up</label><span style="${isOverdue(c.followup)?'color:var(--warning);font-weight:500':''}">${formatDate(c.followup)}</span></div>`);
+  if (c.linkedin) fields.push(`<div class="detail-field full"><label>LinkedIn</label><span><a href="${esc(c.linkedin)}" target="_blank" rel="noopener">${esc(c.linkedin)}</a></span></div>`);
+
+  document.getElementById('detail-body').innerHTML = `
+    <div class="detail-name">${esc(c.name)}</div>
+    ${c.title||c.company ? `<div class="detail-role">${[c.title,c.company].filter(Boolean).map(esc).join(' · ')}</div>` : ''}
+    ${tags.length ? `<div class="detail-tags">${tags.join('')}</div>` : ''}
+    ${fields.length ? `<div class="detail-fields">${fields.join('')}</div>` : ''}
+    ${c.notes ? `<label style="font-size:11px;font-weight:600;color:var(--text-faint);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:6px">Notes</label><div class="notes-box">${esc(c.notes)}</div>` : ''}
+  `;
+
+  document.getElementById('detail-edit-btn').onclick = () => openEdit(id);
+  document.getElementById('detail-modal').style.display = 'flex';
+}
+
+function closeModal(id) {
+  document.getElementById(id).style.display = 'none';
+}
+
+function modalOverlayClick(e) {
+  if (e.target === e.currentTarget) e.currentTarget.style.display = 'none';
+}
+
+function exportData() {
+  const blob = new Blob([JSON.stringify(contacts, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `credex-${today()}.json`;
+  a.click();
+  toast('Exported!');
+}
+
+function triggerImport() {
+  document.getElementById('import-file').click();
+}
+
+function importData(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      const imported = JSON.parse(ev.target.result);
+      if (!Array.isArray(imported)) throw new Error();
+      const existing = new Set(contacts.map(c=>c.id));
+      let added = 0;
+      for (const c of imported) {
+        if (!existing.has(c.id)) { contacts.push(c); added++; }
+      }
+      save();
+      render();
+      toast(`Imported ${added} new contact${added!==1?'s':''}`);
+    } catch {
+      alert('Invalid file. Please use a file exported from this app.');
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none');
+  }
+});
+
+render();
+</script>
+</body>
+</html>
